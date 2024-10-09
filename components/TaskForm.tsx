@@ -5,8 +5,10 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "./ui/textarea";
+import { useRouter } from "next/navigation";
 
 const TaskForm = () => {
+  const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -21,6 +23,7 @@ const TaskForm = () => {
         },
         body: JSON.stringify(data),
       });
+      router.push("/");
       console.log(res);
     } catch (error) {
       console.log(error);

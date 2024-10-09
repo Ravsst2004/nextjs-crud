@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Table,
   TableBody,
@@ -6,12 +8,33 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import prisma from "@/prisma/db";
 import { buttonVariants } from "./ui/button";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
-export async function TaskTable() {
-  const tasks = await prisma.task.findMany();
+interface TasksType {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  createdAt: Date;
+}
+
+const TaskTable = () => {
+  const [tasks, setTasks] = useState<TasksType[]>([]);
+
+  useEffect(() => {
+    const getTasks = async () => {
+      try {
+        const res = await fetch("/api/task");
+        const data = await res.json();
+        setTasks(data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    };
+    getTasks();
+  }, []);
 
   return (
     <div className="overflow-x-auto w-full">
@@ -69,4 +92,6 @@ export async function TaskTable() {
       </Table>
     </div>
   );
-}
+};
+
+export default TaskTable;

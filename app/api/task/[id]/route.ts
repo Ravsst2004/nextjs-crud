@@ -1,4 +1,5 @@
 import prisma from "@/prisma/db";
+import { revalidatePath } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 interface Props {
@@ -14,11 +15,31 @@ export async function GET(request: NextRequest, { params }: Props) {
         id: taskId,
       },
     });
+    revalidatePath("/task", "layout");
     return NextResponse.json(task, { status: 200 });
   } catch (error) {
     console.error("Error fetching task:", error);
     return NextResponse.json(
       { message: "Failed to fetch task" },
+      { status: 500 }
+    );
+  }
+}
+
+export async function DELETE(request: NextRequest, { params }: Props) {
+  const taskId = parseInt(params.id);
+  try {
+    const deleteTask = await prisma.task.delete({
+      where: {
+        id: taskId,
+      },
+    });
+
+    return NextResponse.json(deleteTask, { status: 200 });
+  } catch (error) {
+    console.error("Error deleting task:", error);
+    return NextResponse.json(
+      { message: "Failed to delete task" },
       { status: 500 }
     );
   }
