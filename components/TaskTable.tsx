@@ -8,9 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { buttonVariants } from "./ui/button";
+import { Button, buttonVariants } from "./ui/button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface TasksType {
   id: number;
@@ -35,6 +36,29 @@ const TaskTable = () => {
     };
     getTasks();
   }, []);
+
+  const handleUpdateTaskStatus = async (
+    taskId: number,
+    completedStatus: boolean
+  ) => {
+    try {
+      await fetch(`/api/task/${taskId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ completed: completedStatus }),
+      });
+
+      setTasks((prevTasks) =>
+        prevTasks.map((task) =>
+          task.id === taskId ? { ...task, completed: completedStatus } : task
+        )
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="overflow-x-auto w-full">
@@ -69,7 +93,10 @@ const TaskTable = () => {
               </TableCell>
               <TableCell className="px-4 py-2">
                 <span
-                  className={`inline-block px-3 py-1 text-sm font-semibold rounded-full ${
+                  onClick={() =>
+                    handleUpdateTaskStatus(task.id, !task.completed)
+                  }
+                  className={`inline-block px-3 py-1 text-sm font-semibold rounded-full cursor-pointer  ${
                     task.completed
                       ? "bg-green-100 text-green-800"
                       : "bg-red-100 text-red-800"
