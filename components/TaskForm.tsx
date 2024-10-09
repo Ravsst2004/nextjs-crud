@@ -7,7 +7,17 @@ import { Label } from "@radix-ui/react-label";
 import { Textarea } from "./ui/textarea";
 import { useRouter } from "next/navigation";
 
-const TaskForm = () => {
+interface Props {
+  task?: {
+    id: number;
+    title: string;
+    description: string;
+    completed: boolean;
+    createdAt: Date;
+  };
+}
+
+const TaskForm = ({ task }: Props) => {
   const router = useRouter();
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -16,15 +26,27 @@ const TaskForm = () => {
     const data = Object.fromEntries(formData);
 
     try {
-      const res = await fetch("/api/task", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      if (task) {
+        const res = await fetch(`/api/task/${task.id}`, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        console.log(res);
+      } else {
+        const res = await fetch("/api/task", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+        console.log(res);
+      }
+
       router.push("/");
-      console.log(res);
     } catch (error) {
       console.log(error);
     }
@@ -46,7 +68,7 @@ const TaskForm = () => {
             name="title"
             placeholder="Enter task title"
             className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 sm:text-sm"
-            defaultValue="Title 1"
+            defaultValue={task?.title}
           />
         </div>
         <div className="grid w-full gap-1.5">
@@ -61,9 +83,7 @@ const TaskForm = () => {
             id="description"
             placeholder="Type your message here."
             className="block w-full px-3 py-2 h-64 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:border-zinc-500 sm:text-sm"
-            defaultValue="Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolores
-          provident quo unde dolore aliquam sed in reprehenderit eum pariatur
-          ipsum."
+            defaultValue={task?.description}
           />
         </div>
         <Button variant="default" type="submit" className="w-full">

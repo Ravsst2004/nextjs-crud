@@ -1,6 +1,7 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
@@ -83,7 +84,12 @@ const DetailTask = ({ params }: Props) => {
             </div>
           </div>
           <div className="mt-4 space-x-2">
-            <Button>Edit</Button>
+            <Link
+              href={`/task/edit/${task?.id}`}
+              className={buttonVariants({ variant: "default" })}
+            >
+              Edit
+            </Link>
             <Button onClick={handleDelete} variant="destructive">
               Delete
             </Button>
