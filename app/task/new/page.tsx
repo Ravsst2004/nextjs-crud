@@ -1,7 +1,7 @@
 import { TaskTable } from "@/components/TaskTable";
 import React from "react";
 
-const HomePage = () => {
+const CreateTaskPage = () => {
   return (
     <div>
       <TaskTable />
@@ -9,4 +9,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default CreateTaskPage;

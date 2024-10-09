@@ -27,3 +27,16 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
+export async function GET() {
+  try {
+    const tasks = await prisma.task.findMany();
+    return NextResponse.json(tasks);
+  } catch (error) {
+    console.error("Error fetching tasks:", error);
+    return NextResponse.json(
+      { message: "Failed to fetch tasks", error },
+      { status: 500 }
+    );
+  }
+}
