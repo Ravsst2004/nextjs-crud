@@ -44,7 +44,7 @@ const TaskTable = () => {
             <TableHead className="w-[100px] text-left px-4 py-2 font-semibold text-gray-700">
               Title
             </TableHead>
-            <TableHead className="text-left px-4 py-2 font-semibold text-gray-700">
+            <TableHead className="w-[65rem] text-left px-4 py-2 font-semibold text-gray-700">
               Description
             </TableHead>
             <TableHead className="text-left px-4 py-2 font-semibold text-gray-700">

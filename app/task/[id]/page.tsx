@@ -1,9 +1,20 @@
 "use client";
 
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import Link from "next/link";
 import { notFound, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 interface Props {
   params: { id: string };
@@ -45,7 +56,7 @@ const DetailTask = ({ params }: Props) => {
 
   const handleDelete = async () => {
     try {
-      const res = await fetch(`/api/task/${task?.id}`, {
+      await fetch(`/api/task/${task?.id}`, {
         method: "DELETE",
       });
       route.push("/");
@@ -90,9 +101,28 @@ const DetailTask = ({ params }: Props) => {
             >
               Edit
             </Link>
-            <Button onClick={handleDelete} variant="destructive">
-              Delete
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger
+                className={buttonVariants({ variant: "destructive" })}
+              >
+                Delete
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your task
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction onClick={handleDelete}>
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </div>
       )}

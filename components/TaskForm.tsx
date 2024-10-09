@@ -1,13 +1,13 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Label } from "@radix-ui/react-label";
 import { Textarea } from "./ui/textarea";
 import { useRouter } from "next/navigation";
 
-interface Props {
+interface TaskFormProps {
   task?: {
     id: number;
     title: string;
@@ -17,13 +17,20 @@ interface Props {
   };
 }
 
-const TaskForm = ({ task }: Props) => {
+const TaskForm = ({ task }: TaskFormProps) => {
   const router = useRouter();
+  const [error, setError] = useState<string>("");
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const formData = new FormData(e.target as HTMLFormElement);
     const data = Object.fromEntries(formData);
+
+    if (!data.title || !data.description) {
+      setError("Please fill the field");
+      return;
+    }
 
     try {
       if (task) {
@@ -55,6 +62,7 @@ const TaskForm = ({ task }: Props) => {
   return (
     <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
       <form onSubmit={handleSubmit} className="space-y-6">
+        <h1 className="text-destructive font-bold">{error}</h1>
         <div className="grid w-full gap-1.5">
           <Label
             htmlFor="title"
