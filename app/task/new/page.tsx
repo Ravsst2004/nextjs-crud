@@ -1,10 +1,10 @@
-import { TaskTable } from "@/components/TaskTable";
+import TaskForm from "@/components/TaskForm";
 import React from "react";
 
 const CreateTaskPage = () => {
   return (
     <div>
-      <TaskTable />
+      <TaskForm />
     </div>
   );
 };

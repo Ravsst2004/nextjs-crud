@@ -14,32 +14,59 @@ export async function TaskTable() {
   const tasks = await prisma.task.findMany();
 
   return (
-    <Table>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Title</TableHead>
-          <TableHead>Description</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>View</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {tasks.map((task) => (
-          <TableRow key={task.id}>
-            <TableCell className="font-medium">{task.title}</TableCell>
-            <TableCell>{task.description}</TableCell>
-            <TableCell>{task.completed ? "Completed" : "Pending"}</TableCell>
-            <TableCell className="space-x-2">
-              <Link
-                href={`/task/${task.id}`}
-                className={buttonVariants({ variant: "default" })}
-              >
-                View
-              </Link>
-            </TableCell>
+    <div className="overflow-x-auto w-full">
+      <Table className="min-w-full bg-white border border-gray-200 rounded-lg">
+        <TableHeader className="bg-gray-100">
+          <TableRow>
+            <TableHead className="w-[100px] text-left px-4 py-2 font-semibold text-gray-700">
+              Title
+            </TableHead>
+            <TableHead className="text-left px-4 py-2 font-semibold text-gray-700">
+              Description
+            </TableHead>
+            <TableHead className="text-left px-4 py-2 font-semibold text-gray-700">
+              Status
+            </TableHead>
+            <TableHead className="text-left px-4 py-2 font-semibold text-gray-700">
+              View
+            </TableHead>
           </TableRow>
-        ))}
-      </TableBody>
-    </Table>
+        </TableHeader>
+        <TableBody>
+          {tasks.map((task) => (
+            <TableRow
+              key={task.id}
+              className="border-t border-gray-200 hover:bg-gray-50 transition-colors"
+            >
+              <TableCell className="font-medium px-4 py-2 text-gray-900">
+                {task.title}
+              </TableCell>
+              <TableCell className="px-4 py-2 text-gray-700">
+                {task.description}
+              </TableCell>
+              <TableCell className="px-4 py-2">
+                <span
+                  className={`inline-block px-3 py-1 text-sm font-semibold rounded-full ${
+                    task.completed
+                      ? "bg-green-100 text-green-800"
+                      : "bg-red-100 text-red-800"
+                  }`}
+                >
+                  {task.completed ? "Completed" : "Not Completed"}
+                </span>
+              </TableCell>
+              <TableCell className="px-4 py-2 space-x-2">
+                <Link
+                  href={`/task/${task.id}`}
+                  className={buttonVariants({ variant: "default" })}
+                >
+                  View
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
   );
 }
